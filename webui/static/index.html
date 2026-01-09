@@ -9,165 +9,253 @@
       rel="stylesheet"
     />
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
       :root {
-        --primary: #3b82f6;
-        --bg: #0f172a;
-        --card-bg: #1e293b;
-        --text: #f8fafc;
+        --primary: #6366f1;
+        --secondary: #8b5cf6;
+        --bg: #030712;
+        --card-bg: rgba(31, 41, 55, 0.4);
+        --text: #f9fafb;
+        --accent: #10b981;
       }
       body {
-        font-family: "Inter", sans-serif;
+        font-family: "Outfit", sans-serif;
         background-color: var(--bg);
+        background-image: radial-gradient(circle at 50% -20%, #312e81 0%, transparent 50%),
+                          radial-gradient(circle at 0% 0%, #1e1b4b 0%, transparent 30%);
         color: var(--text);
         margin: 0;
-        padding: 20px;
+        padding: 40px 20px;
+        min-height: 100vh;
       }
       .container {
-        max-width: 900px;
+        max-width: 1000px;
         margin: auto;
       }
       .header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      .header h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        background: linear-gradient(to right, #818cf8, #c084fc);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
+      }
+      .header p {
+        color: #9ca3af;
+        font-size: 1.1rem;
+        letter-spacing: 0.05em;
+      }
+      .search-box {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 12px;
+        border-radius: 20px;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         margin-bottom: 40px;
+      }
+      input {
+        background: transparent;
+        color: white;
+        flex: 1;
+        border: none;
+        padding: 12px 20px;
+        font-size: 1.1rem;
+        outline: none;
+      }
+      button {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        cursor: pointer;
+        padding: 12px 32px;
+        border-radius: 14px;
+        border: none;
+        font-weight: 700;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      }
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
       }
       .card {
         background: var(--card-bg);
-        padding: 24px;
-        border-radius: 12px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        margin-bottom: 24px;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 32px;
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        margin-bottom: 30px;
       }
-      input,
-      button {
-        padding: 12px 16px;
-        border-radius: 8px;
-        border: none;
-        font-size: 16px;
-      }
-      input {
-        background: #334155;
-        color: white;
-        width: 300px;
-      }
-      button {
-        background: var(--primary);
-        color: white;
-        cursor: pointer;
-        font-weight: 600;
-        transition: opacity 0.2s;
-      }
-      button:hover {
-        opacity: 0.9;
+      .section-title {
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+        color: #9ca3af;
       }
       .scan-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid #334155;
-        padding: 12px 0;
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
       }
-      .status {
-        font-weight: bold;
-        text-transform: uppercase;
-        font-size: 12px;
+      .scan-info-name {
+        font-weight: 700;
       }
-      .status-completed {
-        color: #10b981;
+      .scan-info-status {
+        font-size: 0.8rem;
       }
-      .status-running {
-        color: #f59e0b;
+      .status-completed { color: #10b981; }
+      .status-running { color: #f59e0b; }
+      
+      .results-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
       }
-      .results-list {
-        margin-top: 20px;
+      .result-item {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.2s;
       }
-      .result-link {
-        display: block;
-        color: var(--primary);
+      .result-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(99, 102, 241, 0.3);
+      }
+      .result-title {
+        color: #f3f4f6;
+        font-size: 1.2rem;
+        font-weight: 700;
         text-decoration: none;
+        display: block;
         margin-bottom: 8px;
-        font-size: 14px;
       }
-      .result-link:hover {
-        text-decoration: underline;
+      .result-snippet {
+        color: #9ca3af;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+      .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      .badge-google { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+      .badge-bing { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+      
+      .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+      .view-intel-btn {
+        padding: 8px 20px;
+        font-size: 0.8rem;
+      }
+      .no-margin {
+        margin: 0;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <h1>ReconDorker</h1>
-        <div>
-          <input
-            type="text"
-            id="target"
-            placeholder="Enter target domain (e.g. google.com)"
-          />
-          <button onclick="startScan()">Start Scan</button>
-        </div>
+        <h1>RECON<span style="font-weight: 300">DORKER</span></h1>
+        <p>ADVANCED GOOGLE & BING OSINT INTELLIGENCE</p>
       </div>
 
-      <div class="card">
-        <h2>Recent Scans</h2>
+      <div class="search-box">
+        <input type="text" id="target" placeholder="Enter target domain (e.g. example.com)" />
+        <button onclick="startScan()">INITIATE SCAN</button>
+      </div>
+
+      <div id="active-scans" class="card" style="display: none">
+        <h2 class="section-title">ACTIVE INTEL SESSIONS</h2>
         <div id="scan-list"></div>
       </div>
 
       <div id="results-card" class="card" style="display: none">
-        <h2 id="results-title">Results</h2>
-        <div id="results-list" class="results-list"></div>
+        <div class="results-header">
+            <h2 id="results-title" class="no-margin">INTEL RESULTS</h2>
+            <button onclick="closeResults()" class="close-btn">CLOSE</button>
+        </div>
+        <div id="results-list" class="results-grid"></div>
       </div>
     </div>
 
     <script>
       async function startScan() {
         const target = document.getElementById("target").value;
-        if (!target) return alert("Enter a target");
-
-        const res = await fetch("/api/scan", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ target: target, pages: 1 }),
-        });
-        const data = await res.json();
-        pollStatus(data.scan_id);
-        refreshScans();
+        if (!target) return;
+        
+        try {
+            const res = await fetch("/api/scan", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ target: target, pages: 1 }),
+            });
+            const data = await res.json();
+            document.getElementById("active-scans").style.display = "block";
+            pollStatus(data.scan_id);
+            refreshScans();
+        } catch (err) {
+            console.error(err);
+        }
       }
 
       async function refreshScans() {
-        const res = await fetch("/api/scans");
-        const scans = await res.json();
-        const list = document.getElementById("scan-list");
-        list.innerHTML = scans
-          .reverse()
-          .map(
-            (s) => `
-                <div class="scan-item">
-                    <span>${s.target}</span>
-                    <span class="status status-${s.status}">${s.status} (${s.results_count})</span>
-                    <button onclick="viewResults('${s.id}')">View</button>
-                </div>
-            `
-          )
-          .join("");
+        try {
+            const res = await fetch("/api/scans");
+            const scans = await res.json();
+            if (scans.length > 0) document.getElementById("active-scans").style.display = "block";
+            const list = document.getElementById("scan-list");
+            list.innerHTML = scans
+              .reverse()
+              .map((s) => `
+                    <div class="scan-item">
+                        <div>
+                            <div class="scan-info-name">${s.target}</div>
+                            <div class="scan-info-status status-${s.status === 'completed' ? 'completed' : 'running'}">${s.status.toUpperCase()}</div>
+                        </div>
+                        <button onclick="viewResults('${s.id}')" class="view-intel-btn">VIEW INTEL</button>
+                    </div>
+                `).join("");
+        } catch (err) {}
       }
 
       async function viewResults(id) {
+        document.getElementById("results-card").style.display = "block";
         const res = await fetch(`/api/scan/${id}`);
         const data = await res.json();
-        const container = document.getElementById("results-card");
+        document.getElementById("results-title").innerText = `RESULTS FOR ${data.target.toUpperCase()}`;
         const list = document.getElementById("results-list");
-        document.getElementById("results-title").innerText =
-          `Results for ${data.target}`;
+        list.innerHTML = data.results.map((r) => `
+                <div class="result-item">
+                    <span class="badge badge-${r.source?.toLowerCase() || 'google'}">${r.source || 'GOOGLE'}</span>
+                    <a href="${r.link}" target="_blank" class="result-title">${r.title}</a>
+                    <p class="result-snippet">${r.snippet}</p>
+                </div>
+            `).join("");
+        window.scrollTo({ top: document.getElementById("results-card").offsetTop - 40, behavior: 'smooth' });
+      }
 
-        list.innerHTML = data.results
-          .map(
-            (r) => `
-                <a href="${r.link}" target="_blank" class="result-link">${r.title}</a>
-            `
-          )
-          .join("");
-        container.style.display = "block";
+      function closeResults() {
+        document.getElementById("results-card").style.display = "none";
       }
 
       function pollStatus(id) {
@@ -178,9 +266,8 @@
             clearInterval(interval);
             refreshScans();
           }
-        }, 3000);
+        }, 2000);
       }
-
       refreshScans();
     </script>
   </body>

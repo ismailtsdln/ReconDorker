@@ -11,8 +11,18 @@ class MultiSearcher:
     def __init__(self, proxies=None, timeout=15.0):
         self.proxies = proxies
         self.timeout = timeout
+        
+        # Newer httpx uses 'proxy' instead of 'proxies' for simple cases
+        # or expects a different mapping for 'mounts'.
+        # For a single proxy string:
+        proxy_url = None
+        if isinstance(proxies, dict):
+            proxy_url = proxies.get("http://") or proxies.get("https://")
+        elif isinstance(proxies, str):
+            proxy_url = proxies
+
         self.client = httpx.AsyncClient(
-            proxies=self.proxies,
+            proxy=proxy_url,
             timeout=self.timeout,
             follow_redirects=True,
             headers={"User-Agent": get_random_user_agent()}
