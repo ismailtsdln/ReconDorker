@@ -211,12 +211,14 @@
         padding: 8px 20px;
         font-size: 0.75rem;
       }
+      .weight-300 { font-weight: 300; }
+      .results-title-modern { margin: 0; font-size: 1.25rem; }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <h1>RECON<span style="font-weight: 300">DORKER</span></h1>
+        <h1>RECON<span class="weight-300">DORKER</span></h1>
         <p>ADVANCED MULTI-ENGINE OSINT INTELLIGENCE</p>
       </div>
 
@@ -236,7 +238,7 @@
 
       <div id="results-card" class="card hidden">
         <div class="results-header">
-            <h2 id="results-title" style="margin: 0; font-size: 1.25rem;">INTEL RESULTS</h2>
+            <h2 id="results-title" class="results-title-modern">INTEL RESULTS</h2>
             <button onclick="closeResults()" class="close-btn">CLOSE</button>
         </div>
         <div id="results-list" class="results-grid"></div>
