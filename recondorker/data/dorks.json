@@ -1,0 +1,59 @@
+{
+    "general": [
+        "intitle:index.of",
+        "intitle:\"index of /\" + \"last modified\"",
+        "intitle:\"index of /\" + \"parent directory\"",
+        "intitle:\"index of /\" + \"name\" + \"size\"",
+        "intitle:\"index of\" \"server at\"",
+        "inurl:/cgi-bin/ /server-status"
+    ],
+    "config_files": [
+        "ext:env",
+        "ext:conf",
+        "ext:config",
+        "ext:xml intext:password",
+        "ext:ini intext:db_password",
+        "filename:web.config",
+        "filename:settings.json",
+        "filename:config.php",
+        "filename:wp-config.php",
+        "filename:config.py"
+    ],
+    "sensitive_data": [
+        "ext:log",
+        "ext:sql",
+        "ext:db",
+        "ext:sqlite",
+        "ext:bkp",
+        "ext:bak",
+        "ext:old",
+        "ext:temp",
+        "ext:tmp",
+        "ext:zip",
+        "ext:tar.gz",
+        "ext:7z"
+    ],
+    "leaks": [
+        "intext:\"API_KEY\"",
+        "intext:\"AWS_ACCESS_KEY_ID\"",
+        "intext:\"DATABASE_URL\"",
+        "intext:\"HEROKU_API_KEY\"",
+        "intext:\"SSH_PRIVATE_KEY\"",
+        "ext:pem",
+        "ext:crt",
+        "ext:key",
+        "filename:id_rsa",
+        "filename:.bash_history",
+        "filename:.ssh"
+    ],
+    "admin_panels": [
+        "inurl:admin",
+        "inurl:login",
+        "inurl:dashboard",
+        "inurl:wp-admin",
+        "inurl:phpmyadmin",
+        "inurl:controlpanel",
+        "intitle:login",
+        "intitle:admin"
+    ]
+}
