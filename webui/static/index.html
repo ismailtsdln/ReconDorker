@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReconDorker Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #3b82f6;
+        --bg: #0f172a;
+        --card-bg: #1e293b;
+        --text: #f8fafc;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 900px;
+        margin: auto;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+      }
+      .card {
+        background: var(--card-bg);
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 24px;
+      }
+      input,
+      button {
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+      }
+      input {
+        background: #334155;
+        color: white;
+        width: 300px;
+      }
+      button {
+        background: var(--primary);
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        transition: opacity 0.2s;
+      }
+      button:hover {
+        opacity: 0.9;
+      }
+      .scan-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #334155;
+        padding: 12px 0;
+      }
+      .status {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+      .status-completed {
+        color: #10b981;
+      }
+      .status-running {
+        color: #f59e0b;
+      }
+      .results-list {
+        margin-top: 20px;
+      }
+      .result-link {
+        display: block;
+        color: var(--primary);
+        text-decoration: none;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+      .result-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>ReconDorker</h1>
+        <div>
+          <input
+            type="text"
+            id="target"
+            placeholder="Enter target domain (e.g. google.com)"
+          />
+          <button onclick="startScan()">Start Scan</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Recent Scans</h2>
+        <div id="scan-list"></div>
+      </div>
+
+      <div id="results-card" class="card" style="display: none">
+        <h2 id="results-title">Results</h2>
+        <div id="results-list" class="results-list"></div>
+      </div>
+    </div>
+
+    <script>
+      async function startScan() {
+        const target = document.getElementById("target").value;
+        if (!target) return alert("Enter a target");
+
+        const res = await fetch("/api/scan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ target: target, pages: 1 }),
+        });
+        const data = await res.json();
+        pollStatus(data.scan_id);
+        refreshScans();
+      }
+
+      async function refreshScans() {
+        const res = await fetch("/api/scans");
+        const scans = await res.json();
+        const list = document.getElementById("scan-list");
+        list.innerHTML = scans
+          .reverse()
+          .map(
+            (s) => `
+                <div class="scan-item">
+                    <span>${s.target}</span>
+                    <span class="status status-${s.status}">${s.status} (${s.results_count})</span>
+                    <button onclick="viewResults('${s.id}')">View</button>
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      async function viewResults(id) {
+        const res = await fetch(`/api/scan/${id}`);
+        const data = await res.json();
+        const container = document.getElementById("results-card");
+        const list = document.getElementById("results-list");
+        document.getElementById("results-title").innerText =
+          `Results for ${data.target}`;
+
+        list.innerHTML = data.results
+          .map(
+            (r) => `
+                <a href="${r.link}" target="_blank" class="result-link">${r.title}</a>
+            `
+          )
+          .join("");
+        container.style.display = "block";
+      }
+
+      function pollStatus(id) {
+        const interval = setInterval(async () => {
+          const res = await fetch(`/api/scan/${id}`);
+          const data = await res.json();
+          if (data.status === "completed" || data.status.startsWith("failed")) {
+            clearInterval(interval);
+            refreshScans();
+          }
+        }, 3000);
+      }
+
+      refreshScans();
+    </script>
+  </body>
+</html>

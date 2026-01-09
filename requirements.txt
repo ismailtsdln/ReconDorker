@@ -1,0 +1,10 @@
+httpx
+beautifulsoup4
+click
+rich
+fastapi
+uvicorn
+pytest
+pytest-asyncio
+python-dotenv
+jinja2
