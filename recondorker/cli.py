@@ -43,6 +43,7 @@ async def run_scan_async(target, queries, pages, format, output, proxies, engine
         await recon.close()
 
 @click.command()
+@click.version_option(version="0.1.0")
 @click.option('--target', '-t', required=True, help='Target domain (e.g., example.com)')
 @click.option('--pages', '-p', default=1, help='Number of pages to search per dork')
 @click.option('--output', '-o', default='report', help='Output filename (without extension)')

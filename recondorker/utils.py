@@ -38,7 +38,7 @@ BANNER = """
  |_|  \_\___|\___\___/|_| |_|_____/ \___/|_|  |_|\_\___|_|    
 [/banner]
 [bold cyan]    Advanced OSINT & Google Dorking Reconnaissance Tool[/bold cyan]
-[dim]           Created by Deepmind Antigravity v1.0[/dim]
+[dim]           Created by Deepmind Antigravity v0.1.0[/dim]
 """
 
 def get_random_user_agent():
