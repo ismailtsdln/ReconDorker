@@ -25,6 +25,7 @@ class ScanRequest(BaseModel):
     target: str
     pages: Optional[int] = 1
     dorks: Optional[List[str]] = None
+    recursive: Optional[bool] = False
 
 class ScanStatus(BaseModel):
     id: str
@@ -33,11 +34,11 @@ class ScanStatus(BaseModel):
     results_count: int
     results: Optional[List[dict]] = None
 
-async def run_scan_task(scan_id: str, target: str, dorks: List[str], pages: int):
+async def run_scan_task(scan_id: str, target: str, dorks: List[str], pages: int, recursive: bool):
     recon = ReconDorker(target)
     scans[scan_id]["status"] = "running"
     try:
-        results = await recon.run_scan(dorks, pages=pages)
+        results = await recon.run_scan(dorks, pages=pages, recursive=recursive)
         scans[scan_id]["status"] = "completed"
         scans[scan_id]["results"] = results
         scans[scan_id]["results_count"] = len(results)
@@ -49,9 +50,16 @@ async def run_scan_task(scan_id: str, target: str, dorks: List[str], pages: int)
 @app.post("/api/scan", response_model=dict)
 async def start_scan(request: ScanRequest, background_tasks: BackgroundTasks):
     scan_id = str(uuid.uuid4())
-    dorks = request.dorks or [
-        "intitle:index.of", "ext:php", "ext:log", "inurl:admin"
-    ]
+    from recondorker.utils import load_dorks
+    dorks_config = load_dorks()
+    dorks = request.dorks or []
+    if not dorks:
+        for cat in dorks_config:
+            dorks.extend(dorks_config[cat])
+    
+    if not dorks:
+        dorks = ["intitle:index.of", "ext:php", "ext:log", "inurl:admin"]
+
     scans[scan_id] = {
         "id": scan_id,
         "target": request.target,
@@ -59,7 +67,7 @@ async def start_scan(request: ScanRequest, background_tasks: BackgroundTasks):
         "results_count": 0,
         "results": []
     }
-    background_tasks.add_task(run_scan_task, scan_id, request.target, dorks, request.pages)
+    background_tasks.add_task(run_scan_task, scan_id, request.target, dorks, request.pages, request.recursive)
     return {"scan_id": scan_id}
 
 @app.get("/api/scan/{scan_id}", response_model=ScanStatus)

@@ -58,7 +58,9 @@ HTML_TEMPLATE = """
                     <tr class="hover:bg-slate-50/50 transition-colors">
                         <td class="px-6 py-6 align-top">
                             <span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-tighter 
-                                {% if result.source == 'Google' %}bg-blue-100 text-blue-700{% else %}bg-green-100 text-green-700{% endif %}">
+                                {% if result.source == 'Google' %}bg-blue-100 text-blue-700
+                                {% elif result.source == 'Bing' %}bg-green-100 text-green-700
+                                {% else %}bg-orange-100 text-orange-700{% endif %}">
                                 {{ result.source }}
                             </span>
                         </td>
@@ -67,6 +69,21 @@ HTML_TEMPLATE = """
                                 {{ result.title }}
                             </a>
                             <p class="text-sm text-slate-500 leading-relaxed max-w-2xl">{{ result.snippet }}</p>
+                            
+                            {% if result.metadata %}
+                            <div class="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Document Metadata</p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    {% for key, value in result.metadata.items() %}
+                                    <div class="text-[11px]">
+                                        <span class="text-slate-400">{{ key }}:</span>
+                                        <span class="text-slate-600 font-medium">{{ value }}</span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
                             <p class="text-[10px] text-slate-400 font-mono mt-2 truncate">{{ result.link }}</p>
                         </td>
                     </tr>

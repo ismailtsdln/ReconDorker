@@ -34,3 +34,18 @@ class ResultParser:
                 if link.startswith('http'):
                     results.append({"title": title, "link": link, "snippet": snippet, "source": "Bing"})
         return results
+    @staticmethod
+    def parse_duckduckgo_results(html_content):
+        soup = BeautifulSoup(html_content, 'html.parser')
+        results = []
+        for result in soup.select('div.result'):
+            anchor = result.select_one('a.result__a')
+            if anchor and anchor.get('href'):
+                link = anchor['href']
+                title = anchor.text
+                snippet_elem = result.select_one('a.result__snippet')
+                snippet = snippet_elem.text if snippet_elem else ""
+                # DDG sometimes uses proxy links, but html version is usually direct
+                if link.startswith('http'):
+                    results.append({"title": title, "link": link, "snippet": snippet, "source": "DuckDuckGo"})
+        return results
