@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: recondorker
+Version: 0.1.0
+Requires-Dist: httpx
+Requires-Dist: beautifulsoup4
+Requires-Dist: click
+Requires-Dist: rich
+Requires-Dist: fastapi
+Requires-Dist: uvicorn
+Requires-Dist: python-dotenv
+Requires-Dist: jinja2
+Dynamic: requires-dist

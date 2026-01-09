@@ -1,0 +1,9 @@
+README.md
+setup.py
+recondorker.egg-info/PKG-INFO
+recondorker.egg-info/SOURCES.txt
+recondorker.egg-info/dependency_links.txt
+recondorker.egg-info/entry_points.txt
+recondorker.egg-info/requires.txt
+recondorker.egg-info/top_level.txt
+tests/test_parser.py

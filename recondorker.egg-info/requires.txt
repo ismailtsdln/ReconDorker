@@ -1,0 +1,8 @@
+httpx
+beautifulsoup4
+click
+rich
+fastapi
+uvicorn
+python-dotenv
+jinja2
